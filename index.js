@@ -13,13 +13,17 @@ export const inject = ['webServer'];
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const STYLESHEET = join(HERE, 'theme.css');
+const GUEST_CSS = join(HERE, 'guest.css');
 const ARTWORK = join(HERE, 'assets', 'portrait-corner.webp');
+const GUEST_ART = join(HERE, 'assets', 'guest', 'dafeiyu.webp');
 
 const ROUTES = {
   '/dsh-yunlan/theme.css': { file: STYLESHEET, type: 'text/css; charset=utf-8' },
+  '/dsh-yunlan/guest.css': { file: GUEST_CSS, type: 'text/css; charset=utf-8' },
   // 两个扩展名指向同一份 WebP，改素材时不必重启宿主
   '/dsh-yunlan/portrait.webp': { file: ARTWORK, type: 'image/webp' },
   '/dsh-yunlan/portrait.png': { file: ARTWORK, type: 'image/webp' },
+  '/dsh-yunlan/guest/dafeiyu.webp': { file: GUEST_ART, type: 'image/webp' },
 };
 
 export function apply(ctx) {

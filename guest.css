@@ -1,0 +1,112 @@
+/* ==========================================================================
+   客座角色：大肥鱼 — 云澜 · 白雾 的附加角色位
+   --------------------------------------------------------------------------
+   只覆盖角色显示位（body::after）与交互；不碰任何 --dsw-* token，
+   所以主包换色时这里不需要跟着改。由 client.js 在 localStorage 开启时注入。
+
+   素材署名见 GUEST-ATTRIBUTION.md / GUEST-LICENSE.txt。
+   ========================================================================== */
+
+html body[data-guest="dafeiyu"]::after {
+  inset: auto -6% -15% auto;
+  width: min(31vw, 430px);
+  height: min(80vh, 940px);
+  background: url("/dsh-yunlan/guest/dafeiyu.webp") no-repeat right bottom / contain;
+  opacity: 0.94;
+  filter: drop-shadow(0 8px 22px rgba(30, 36, 40, 0.16));
+  -webkit-mask-image: none;
+  mask-image: none;
+  transform-origin: 100% 100%;
+  transition: transform 0.6s cubic-bezier(.22,.61,.36,1), filter 0.5s ease;
+}
+
+/* 深色模式：去掉浅底描边的负担，让蓝发在深岫底上自然发光 */
+html body[data-ds-dark-theme][data-guest="dafeiyu"]::after {
+  opacity: 0.82;
+  filter: drop-shadow(0 10px 30px rgba(6, 10, 14, 0.55)) brightness(1.05);
+}
+
+/* 悬停热区：上浮 + 轻微摇摆，模拟鲸尾摆动 */
+#yunlan-guest-hotspot {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  width: min(31vw, 430px);
+  height: min(80vh, 940px);
+  z-index: 2;
+  cursor: pointer;
+}
+
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  body:has(#yunlan-guest-hotspot:hover)::after {
+    transform: translateY(-8px) rotate(-1.2deg);
+    filter: drop-shadow(0 14px 28px rgba(30, 36, 40, 0.22));
+  }
+}
+
+/* 被点了一下：短促的弹跳 */
+@keyframes yunlan-guest-poke {
+  0% { transform: translateY(0) rotate(0); }
+  35% { transform: translateY(-16px) rotate(2.5deg) scale(1.03); }
+  70% { transform: translateY(-4px) rotate(-1.5deg) scale(0.99); }
+  100% { transform: translateY(0) rotate(0); }
+}
+
+body.yunlan-guest-poked::after {
+  animation: yunlan-guest-poke 0.62s cubic-bezier(.3,.7,.3,1);
+}
+
+/* 台词浮层 */
+#yunlan-guest-line {
+  position: fixed;
+  right: min(34vw, 500px);
+  bottom: min(30vh, 300px);
+  z-index: 3;
+  padding: 8px 14px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.92);
+  color: #2b3136;
+  font-size: 13px;
+  line-height: 1.5;
+  box-shadow: 0 6px 22px rgba(30, 36, 40, 0.14);
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.24s ease, transform 0.24s ease;
+}
+
+body[data-ds-dark-theme] #yunlan-guest-line {
+  background: rgba(38, 45, 50, 0.94);
+  color: #e8ecee;
+  box-shadow: 0 6px 22px rgba(0, 0, 0, 0.4);
+}
+
+#yunlan-guest-line.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* 客座提示：只在热区右下角放一个极小的圆点，点击可切换 */
+#yunlan-guest-toggle {
+  position: fixed;
+  right: 14px;
+  bottom: 14px;
+  z-index: 3;
+  width: 9px;
+  height: 9px;
+  border: 0;
+  border-radius: 50%;
+  padding: 0;
+  background: rgba(92, 126, 146, 0.55);
+  opacity: 0.35;
+  cursor: pointer;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+#yunlan-guest-toggle:hover { opacity: 1; transform: scale(1.35); }
+
+@media (prefers-reduced-motion: reduce) {
+  html body[data-guest="dafeiyu"]::after,
+  #yunlan-guest-line,
+  #yunlan-guest-toggle { transition: none; animation: none; }
+}

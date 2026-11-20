@@ -58,9 +58,18 @@ dsh plugin --profile desktop remove dsh-yunlan-theme
 
 底纹换图：替换 `assets/portrait-corner.webp`（建议透明背景、Alpha 上限 20% 左右）。
 
-## 联名客座（规划）
+## 联名客座：大肥鱼
 
-`docs/guest-dafeiyu.md` 记录了与社区形象「大肥鱼」的联动方案：做成独立可选包（`dsh-yunlan-guest-dafeiyu`），素材按 CC BY-NC-SA 4.0 单独授权，主包保持 MIT。同一时间只显示一个角色，配色 token 不受影响。
+![客座角色](docs/preview-guest.png)
+
+内置了与社区形象「大肥鱼」的联动，默认关闭，随时切换：
+
+- **切换**：点界面右下角的小圆点。状态存在浏览器 `localStorage`，刷新后保持。
+- **交互**：鼠标悬停角色上浮摆尾；点击切一句台词（「我不是大肥鱼……」等 4 句轮换）。
+- **互斥**：大肥鱼与云澜共用同一个角色位，同一时间只出现一个；界面配色 token 完全不变。
+- **授权**：素材来自 [YunYueSama/codex-deepseek-pet](https://github.com/YunYueSama/codex-deepseek-pet)，按其署名许可使用（允许修改与商用，须署名）。详见 [GUEST-ATTRIBUTION.md](GUEST-ATTRIBUTION.md) 与 [GUEST-LICENSE.txt](GUEST-LICENSE.txt)。`assets/guest/dafeiyu.webp` 经缩放与 WebP 转码，未改动角色内容。
+
+设计动机与完整方案见 `docs/guest-dafeiyu.md`。注意：方案文档基于早期对底层社区角色授权的保守判断，建议拆成独立包；实际取用的素材来自上游作者的署名许可仓库，权限足够，因此最终实现改为内置可切换客座，省去双包安装。
 
 ## 实现说明
 
