@@ -24,14 +24,21 @@
     var line = $('yunlan-buddy-line');
     if (!buddy) return;
     // 锚点：输入框座席（WorkBuddy 用 .cr-input-container，DSH 用 composerSeat）
-    // 真正的输入框（hero 和会话页共用同一个类）
-    var seat = document.querySelector('[class*="_input"]') ||
-               document.querySelector('[role="textbox"]') ||
-               document.querySelector('[contenteditable="true"]') ||
-               document.querySelector('textarea');
-    if (!seat) return;
+    // 精确锚点：DSH 的 composer 输入框。用 id 前缀匹配，避免抓到设置/搜索里的 input
+    var seat = document.querySelector('div[class*="GRgSLq_input"]') ||
+               document.querySelector('[class*="composerStack"] [class*="_input"]');
+    if (!seat) { buddy.style.display = 'none'; hideSwitch(); return; }
     var r = seat.getBoundingClientRect();
-    if (r.width <= 0 || r.width > window.innerWidth * 0.9) return;
+    // 只在输入框真正可见、且在视口内时显示；其它页面（设置/弹窗/侧栏）一律隐藏
+    var visible = r.width > 240 && r.width < window.innerWidth * 0.85 &&
+                  r.height > 20 && r.height < 260 &&
+                  r.top > 0 && r.top < window.innerHeight &&
+                  r.bottom <= window.innerHeight + 4 &&
+                  getComputedStyle(seat).visibility !== 'hidden' &&
+                  getComputedStyle(seat).display !== 'none';
+    if (!visible) { buddy.style.display = 'none'; hideSwitch(); if (line) line.classList.remove('show'); return; }
+    buddy.style.display = '';
+    showSwitch();
     // 扒在输入框右上角，略微压住边框（对齐 WorkBuddy: right-98 / top-100）
     var left = Math.round(r.right - 92);
     var top = Math.round(r.top - 78);
@@ -41,7 +48,15 @@
       line.style.left = Math.max(8, left - 132) + 'px';
       line.style.top = Math.max(8, top - 34) + 'px';
     }
+    var sw = $('yunlan-buddy-switch');
+    if (sw) {
+      sw.style.left = Math.max(8, left - 4) + 'px';
+      sw.style.top = (top + 100) + 'px';
+    }
   }
+
+  function hideSwitch() { var sw = $('yunlan-buddy-switch'); if (sw) sw.style.display = 'none'; }
+  function showSwitch() { var sw = $('yunlan-buddy-switch'); if (sw) sw.style.display = ''; }
 
   function setFaces() {
     var wrap = $('yunlan-buddy');
@@ -61,7 +76,10 @@
     localStorage.setItem('dshYunlanBuddy', who);
     setFaces();
     var sw = $('yunlan-buddy-switch');
-    if (sw) sw.title = who === 'yunlan' ? '当前：云澜（点击换大肥鱼）' : '当前：大肥鱼（点击换云澜）';
+    if (sw) {
+      var btns = sw.querySelectorAll('button');
+      for (var i = 0; i < btns.length; i++) btns[i].classList.toggle('on', btns[i].dataset.who === who);
+    }
   }
 
   function say(idx) {
@@ -136,13 +154,18 @@
           line.setAttribute('role', 'status');
           document.body.appendChild(line); owned.push(line);
 
-          var sw = document.createElement('button');
+          var sw = document.createElement('div');
           sw.id = 'yunlan-buddy-switch';
-          sw.type = 'button';
           sw.setAttribute('aria-label', '切换挂件角色');
-          sw.addEventListener('click', function (e) {
-            e.stopPropagation();
-            setWho(who === 'yunlan' ? 'dafeiyu' : 'yunlan');
+          [['yunlan', '云澜'], ['dafeiyu', '大肥鱼']].forEach(function (pair) {
+            var btn = document.createElement('button');
+            btn.type = 'button';
+            btn.dataset.who = pair[0];
+            btn.title = pair[1];
+            btn.setAttribute('aria-label', pair[1]);
+            btn.style.backgroundImage = 'url(/dsh-yunlan/q/' + pair[0] + '-1.webp)';
+            btn.addEventListener('click', function (e) { e.stopPropagation(); setWho(pair[0]); });
+            sw.appendChild(btn);
           });
           document.body.appendChild(sw); owned.push(sw);
 
@@ -156,19 +179,31 @@
           setWho(localStorage.getItem('dshYunlanBuddy') === 'dafeiyu' ? 'dafeiyu' : 'yunlan');
           place();
 
-          // 事件驱动重排：DOM 变化 / resize，rAF 合帧
+          // rAF 合帧；只监听 resize + 锚点尺寸变化，避免全局 observer 乱飞
           var pending = false;
           function schedule() {
             if (pending) return;
             pending = true;
             requestAnimationFrame(function () { pending = false; try { place(); } catch (e) {} });
           }
-          var obs = new MutationObserver(schedule);
-          obs.observe(document.body, { childList: true, subtree: true });
           window.addEventListener('resize', schedule);
 
+          var ro = null;
+          try {
+            ro = new ResizeObserver(schedule);
+            var anchor = document.querySelector('div[class*="GRgSLq_input"]');
+            if (anchor) ro.observe(anchor);
+          } catch (e) {}
+          // 低频兜底：页面切换（hero <-> 会话）时锚点会换节点
+          var tick = setInterval(function () {
+            var a = document.querySelector('div[class*="GRgSLq_input"]');
+            if (a && ro) { try { ro.disconnect(); ro.observe(a); } catch (e) {} }
+            schedule();
+          }, 1600);
+
           var cleanup = function () {
-            try { obs.disconnect(); } catch (e) {}
+            clearInterval(tick);
+            try { if (ro) ro.disconnect(); } catch (e) {}
             clearTimeout(lineTimer);
             clearTimeout(hoverTimer);
             for (var i = 0; i < owned.length; i++) owned[i].remove();
