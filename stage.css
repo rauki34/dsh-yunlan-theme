@@ -20,6 +20,8 @@
   height: 92px;
   transform-origin: 50% 100%;
   will-change: transform;
+  pointer-events: auto;   /* 角色本体可点；舞台其余区域仍透传 */
+  cursor: pointer;
 }
 
 #yunlan-stage .actor-yunlan { left: 0; }

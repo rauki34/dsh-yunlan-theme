@@ -10,13 +10,14 @@
  */
 (function () {
   var Q = '/dsh-yunlan/q/';
-  // 统一头身比/画风的新生成主图；状态差异由 stage.css 的滤镜与变形表达
-  var YUN_IMG = Q + 'gen-yunlan.webp';
-  var DF_IMG = Q + 'gen-dafeiyu.webp';
-  var YUN = [YUN_IMG, YUN_IMG, YUN_IMG, YUN_IMG, YUN_IMG, YUN_IMG];
+  // 每套 6/8 张独立表情：状态切换时图片真的会变，交互看得见
+  // 云澜：1普通 2开心 3关注 4害羞 5打盹 6困
+  var YUN = [1,2,3,4,5,6].map(function (i) { return Q + 'yunlan-' + i + '.webp'; });
+  // 大肥鱼：8 个语义表情（半身裁切）
   var DF = {
-    idle: DF_IMG, eat: DF_IMG, surprise: DF_IMG, shy: DF_IMG,
-    angry: DF_IMG, sleep: DF_IMG, wink: DF_IMG, pout: DF_IMG,
+    idle: Q + 'df-idle.webp', eat: Q + 'df-eat.webp', surprise: Q + 'df-surprise.webp',
+    shy: Q + 'df-shy.webp', angry: Q + 'df-angry.webp', sleep: Q + 'df-sleep.webp',
+    wink: Q + 'df-wink.webp', pout: Q + 'df-pout.webp',
   };
 
   var state = 'idle';
@@ -36,6 +37,13 @@
       '<div class="actor actor-yunlan" id="actor-yunlan"><div class="face on"><img src="' + YUN[0] + '" alt="云澜"></div></div>' +
       '<div class="actor actor-df" id="actor-df"><div class="face on"><img src="' + DF.eat + '" alt="大肥鱼"></div></div>' +
       '<div class="bubble" id="yunlan-bubble"></div>';
+    // 点击角色 = 主动互动：切表情 + 台词，不用等偶发
+    stage.addEventListener('click', function (e) {
+      var actor = e.target.closest ? e.target.closest('.actor') : null;
+      if (!actor) return;
+      if (actor.id === 'actor-df') pokeDF();
+      else pokeYun();
+    });
     document.body.appendChild(stage); owned.push(stage);
     return stage;
   }
@@ -54,6 +62,24 @@
     b.className = 'bubble show' + (who === 'df' ? ' from-df' : '');
     clearLaters();
     later(function () { b.className = 'bubble'; }, ms || 2600);
+  }
+
+  function pokeDF() {
+    var stage = $('yunlan-stage');
+    if (!stage) return;
+    stage.classList.add('jumped');
+    face('df', DF.surprise);
+    bubble('别戳！', 'df', 1300);
+    later(function () {
+      face('df', DF.angry);
+      stage.classList.remove('jumped');
+      bubble('我不是大肥鱼……', 'df', 1800);
+    }, 700);
+  }
+  function pokeYun() {
+    face('yunlan', YUN[1]);
+    bubble('（歪头）怎么啦？', 'yunlan', 1600);
+    later(function () { face('yunlan', state === 'idle' ? YUN[4] : YUN[0]); }, 1700);
   }
 
   /* ---------- 定位：只在输入框可见时显示，绝不乱飞 ---------- */
@@ -108,7 +134,7 @@
       face('yunlan', YUN[4]);           // 打盹
       face('df', DF.eat);               // 捧碗吃白饭
       bubble('（大肥鱼扒饭中…）', 'df', 2200);
-      interactTimer = setTimeout(function () { perform('interact', true); }, 14000 + Math.random() * 8000);
+      interactTimer = setTimeout(function () { perform('interact', true); }, 8000 + Math.random() * 6000);
     } else if (state === 'typing') {
       face('yunlan', YUN[2]);           // 凑近看
       face('df', DF.pout);              // 偷瞄
