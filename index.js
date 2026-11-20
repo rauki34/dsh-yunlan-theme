@@ -27,23 +27,17 @@ const ROUTES = {
 };
 
 // Q版表情路由：yunlan-1..6 / dafeiyu-1..6
-for (const who of ['yunlan', 'dafeiyu']) {
-  for (let i = 1; i <= 6; i++) {
-    ROUTES['/dsh-yunlan/q/' + who + '-' + i + '.webp'] = {
-      file: join(Q_DIR, who + '-' + i + '.webp'), type: 'image/webp',
-    };
-  }
+for (let i = 1; i <= 5; i++) {
+  ROUTES['/dsh-yunlan/q/yunlan-' + i + '.webp'] = {
+    file: join(Q_DIR, 'yunlan-' + i + '.webp'), type: 'image/webp',
+  };
 }
-for (const name of ['idle','eat','surprise','shy','angry','sleep','wink','pout']) {
+for (const name of ['idle','eat','surprise','shy','angry','sleep']) {
   ROUTES['/dsh-yunlan/q/df-' + name + '.webp'] = {
     file: join(Q_DIR, 'df-' + name + '.webp'), type: 'image/webp',
   };
 }
-for (const name of ['gen-yunlan', 'gen-dafeiyu']) {
-  ROUTES['/dsh-yunlan/q/' + name + '.webp'] = {
-    file: join(Q_DIR, name + '.webp'), type: 'image/webp',
-  };
-}
+
 
 export function apply(ctx) {
   const webServer = ctx.webServer;

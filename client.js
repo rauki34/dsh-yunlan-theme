@@ -10,14 +10,14 @@
  */
 (function () {
   var Q = '/dsh-yunlan/q/';
-  // 每套 6/8 张独立表情：状态切换时图片真的会变，交互看得见
-  // 云澜：1普通 2开心 3关注 4害羞 5打盹 6困
-  var YUN = [1,2,3,4,5,6].map(function (i) { return Q + 'yunlan-' + i + '.webp'; });
-  // 大肥鱼：8 个语义表情（半身裁切）
+  // 同一批生成的整套表情：头身比与画风统一
+  // 云澜：1普通 2开心 3关注 4害羞 5打盹
+  var YUN = [1,2,3,4,5].map(function (i) { return Q + 'yunlan-' + i + '.webp'; });
+  YUN.push(YUN[4]); // 索引 5 复用打盹，保持旧代码里的 6 个位置
+  // 大肥鱼：普通 / 吃白饭(鼓腮偷感) / 惊讶 / 生气鼓腮 / 害羞 / 打盹
   var DF = {
     idle: Q + 'df-idle.webp', eat: Q + 'df-eat.webp', surprise: Q + 'df-surprise.webp',
     shy: Q + 'df-shy.webp', angry: Q + 'df-angry.webp', sleep: Q + 'df-sleep.webp',
-    wink: Q + 'df-wink.webp', pout: Q + 'df-pout.webp',
   };
 
   var state = 'idle';
@@ -137,7 +137,7 @@
       interactTimer = setTimeout(function () { perform('interact', true); }, 8000 + Math.random() * 6000);
     } else if (state === 'typing') {
       face('yunlan', YUN[2]);           // 凑近看
-      face('df', DF.pout);              // 偷瞄
+      face('df', DF.idle);              // 偷瞄
       bubble('在写什么呢？', 'yunlan', 2000);
     } else if (state === 'thinking') {
       face('yunlan', YUN[3]);           // 急
@@ -158,7 +158,7 @@
         face('df', DF.angry);
         bubble('我不是大肥鱼……', 'df', 1800);
         stage.classList.remove('jumped');
-        face('yunlan', YUN[5]);
+        face('yunlan', YUN[4]);
       }, 1600);
       later(function () { perform('idle', true); }, 3600);
     }
