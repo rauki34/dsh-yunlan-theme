@@ -114,7 +114,8 @@ html body [class*="Sidebar"] {
    对应 WorkBuddy 的 .conversation-shell
    ========================================================================== */
 html body [class*="an3WzG_viewArea"],
-html body [class*="an3WzG_scrollBody"] {
+html body [class*="an3WzG_scrollBody"],
+html body [class*="an3WzG_body"] {
   background-color: #fbfcfd !important;
   background-image:
     url("/dsh-yunlan/portrait.webp"),
@@ -129,7 +130,8 @@ html body [class*="an3WzG_scrollBody"] {
 }
 
 html body[data-ds-dark-theme] [class*="an3WzG_viewArea"],
-html body[data-ds-dark-theme] [class*="an3WzG_scrollBody"] {
+html body[data-ds-dark-theme] [class*="an3WzG_scrollBody"],
+html body[data-ds-dark-theme] [class*="an3WzG_body"] {
   background-color: #161f25 !important;
   background-image:
     url("/dsh-yunlan/portrait.webp"),
@@ -144,9 +146,26 @@ html body[data-ds-dark-theme] [class*="an3WzG_scrollBody"] {
   100% { background-position: 100% 88%, 34% 28%,  62% 44%,  56% 76%,  48% 18%; }
 }
 
-/* 主面板兜底底色 */
-html body [class*="mP3x-q_mainPanel"] { background-color: #fbfcfd !important; }
-html body[data-ds-dark-theme] [class*="mP3x-q_mainPanel"] { background-color: #161f25 !important; }
+/* 主面板兜底：hero 页没有 viewArea，底纹落在这里 */
+html body [class*="mP3x-q_mainPanel"] {
+  background-color: #fbfcfd !important;
+  background-image:
+    url("/dsh-yunlan/portrait.webp"),
+    radial-gradient(58% 42% at 18% 22%, rgba(255,255,255,.92) 0%, rgba(255,255,255,0) 68%),
+    radial-gradient(66% 48% at 82% 62%, rgba(226,236,243,.66) 0%, rgba(226,236,243,0) 70%),
+    radial-gradient(52% 40% at 48% 98%, rgba(255,255,255,.96) 0%, rgba(255,255,255,0) 72%) !important;
+  background-repeat: no-repeat !important;
+  background-size: 390px auto, 170% 170%, 170% 170%, 170% 170% !important;
+  background-position: 100% 88%, 0% 0%, 100% 100%, 50% 100% !important;
+  animation: dsh-mist 52s ease-in-out infinite alternate !important;
+}
+html body[data-ds-dark-theme] [class*="mP3x-q_mainPanel"] {
+  background-color: #161f25 !important;
+  background-image:
+    url("/dsh-yunlan/portrait.webp"),
+    radial-gradient(58% 42% at 18% 22%, rgba(28,40,48,.9) 0%, rgba(28,40,48,0) 68%),
+    radial-gradient(66% 48% at 82% 62%, rgba(40,58,70,.6) 0%, rgba(40,58,70,0) 70%) !important;
+}
 
 /* 输入框：磨砂白（对齐 WorkBuddy .cr-input-container） */
 html body [class*="an3WzG_composerSeat"] {
@@ -155,5 +174,6 @@ html body [class*="an3WzG_composerSeat"] {
 
 @media (prefers-reduced-motion: reduce) {
   html body [class*="an3WzG_viewArea"],
-  html body [class*="an3WzG_scrollBody"] { animation: none !important; }
+  html body [class*="an3WzG_scrollBody"],
+  html body [class*="an3WzG_body"] { animation: none !important; }
 }

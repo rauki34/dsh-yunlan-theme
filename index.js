@@ -13,13 +13,13 @@ export const inject = ['webServer'];
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const STYLESHEET = join(HERE, 'theme.css');
-const GUEST_CSS = join(HERE, 'guest.css');
+const STAGE_CSS = join(HERE, 'stage.css');
 const ARTWORK = join(HERE, 'assets', 'portrait-corner.webp');
 const Q_DIR = join(HERE, 'assets', 'q');
 
 const ROUTES = {
   '/dsh-yunlan/theme.css': { file: STYLESHEET, type: 'text/css; charset=utf-8' },
-  '/dsh-yunlan/guest.css': { file: GUEST_CSS, type: 'text/css; charset=utf-8' },
+  '/dsh-yunlan/stage.css': { file: STAGE_CSS, type: 'text/css; charset=utf-8' },
   // 两个扩展名指向同一份 WebP，改素材时不必重启宿主
   '/dsh-yunlan/portrait.webp': { file: ARTWORK, type: 'image/webp' },
   '/dsh-yunlan/portrait.png': { file: ARTWORK, type: 'image/webp' },
@@ -33,6 +33,11 @@ for (const who of ['yunlan', 'dafeiyu']) {
       file: join(Q_DIR, who + '-' + i + '.webp'), type: 'image/webp',
     };
   }
+}
+for (const name of ['idle','eat','surprise','shy','angry','sleep','wink','pout']) {
+  ROUTES['/dsh-yunlan/q/df-' + name + '.webp'] = {
+    file: join(Q_DIR, 'df-' + name + '.webp'), type: 'image/webp',
+  };
 }
 
 export function apply(ctx) {

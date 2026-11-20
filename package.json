@@ -1,7 +1,7 @@
 {
   "name": "dsh-yunlan-theme",
-  "version": "0.3.0",
-  "description": "云澜 · 白雾 for DSH — WorkBuddy-style: inner mist backdrop + Q-version buddy on composer",
+  "version": "0.4.0",
+  "description": "云澜 · 白雾 for DSH — animated dual-character stage with idle/typing/thinking skits",
   "type": "module",
   "license": "MIT",
   "author": "rauki",
@@ -42,7 +42,8 @@
     "GUEST-LICENSE.txt",
     "README.md",
     "LICENSE",
-    "assets/q/*"
+    "assets/q/*",
+    "stage.css"
   ],
   "dsh": {
     "bundle": {
