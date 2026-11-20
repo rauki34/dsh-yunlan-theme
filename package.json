@@ -1,7 +1,7 @@
 {
   "name": "dsh-yunlan-theme",
-  "version": "0.2.0",
-  "description": "云澜 · 白雾 — a misty theme for DeepSeek Harness, with a switchable guest character",
+  "version": "0.3.0",
+  "description": "云澜 · 白雾 for DSH — WorkBuddy-style: inner mist backdrop + Q-version buddy on composer",
   "type": "module",
   "license": "MIT",
   "author": "rauki",
@@ -41,7 +41,8 @@
     "GUEST-ATTRIBUTION.md",
     "GUEST-LICENSE.txt",
     "README.md",
-    "LICENSE"
+    "LICENSE",
+    "assets/q/*"
   ],
   "dsh": {
     "bundle": {

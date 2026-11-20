@@ -1,67 +1,53 @@
 /* ==========================================================================
-   云澜 · 白雾 — DeepSeek Harness 主题
-   --------------------------------------------------------------------------
-   做法：只改设计 token（--dsw-*）+ 两个 body 伪元素，不碰组件结构。
-
-   两个必须记住的实现约束：
-   1. 官方在 body 上第二次声明了整套 --dsw-static-* 色阶，且加载在我们的
-      样式表之后。只写 :root 会被盖掉，必须用 `html body` 把特异性抬上去。
-   2. 雾层是 position: fixed 且在内容之上，强度必须克制（角落 alpha ≈0.2、
-      中央留空），否则正文对比度会被整体拉低。
+   白龍 · 雲瀾 —— DSH 皮肤 v1「白霧」
+   对齐 WorkBuddy 白雾：素白 / 雾蓝灰 / 流动雾气 / 淡底纹 / Q版挂件
    ========================================================================== */
 
-/* ==========================================================================
-   色阶底座
-   --------------------------------------------------------------------------
-   全部别名（--dsw-alias-*）都按语义引用这里的静态色阶，所以换掉色阶就等于
-   换掉整站配色，不用逐条重写别名。
-   ========================================================================== */
-
+/* 官方在 body 上第二次声明整套色阶且加载更晚，必须用 html body 抬特异性 */
 html body,
 html body[data-ds-dark-theme] {
-  /* 雾白 → 深岫：浅色端冷白，深色端带蓝的暗面 */
+  /* 雾白色阶：WorkBuddy 同一套色系 */
   --dsw-static-neutral-bluish-00: #fcfdfd;
-  --dsw-static-neutral-bluish-50: #f8fafb;
-  --dsw-static-neutral-bluish-55: #f5f8f9;
-  --dsw-static-neutral-bluish-60: #fafbfc;
-  --dsw-static-neutral-bluish-75: #eff2f4;
-  --dsw-static-neutral-bluish-90: #e9edef;
-  --dsw-static-neutral-bluish-100: #e3e8ea;
-  --dsw-static-neutral-bluish-150: #dfe4e7;
-  --dsw-static-neutral-bluish-200: #d7dde0;
-  --dsw-static-neutral-bluish-300: #c5ccd0;
-  --dsw-static-neutral-bluish-310: #bfc7cc;
-  --dsw-static-neutral-bluish-400: #a3abb0;
-  --dsw-static-neutral-bluish-500: #8b949a;
-  --dsw-static-neutral-bluish-600: #757e84;
-  --dsw-static-neutral-bluish-700: #5b656b;
-  --dsw-static-neutral-bluish-750: #454e54;
-  --dsw-static-neutral-bluish-800: #363f45;
-  --dsw-static-neutral-bluish-850: #2c3439;
-  --dsw-static-neutral-bluish-875: #242b30;
-  --dsw-static-neutral-bluish-900: #1b2226;
-  --dsw-static-neutral-bluish-950: #151b1f;
-  --dsw-static-neutral-bluish-1000: #0f1417;
+  --dsw-static-neutral-bluish-50: #f9fbfc;
+  --dsw-static-neutral-bluish-55: #f6f9fa;
+  --dsw-static-neutral-bluish-60: #fbfcfd;
+  --dsw-static-neutral-bluish-75: #f2f6f9;
+  --dsw-static-neutral-bluish-90: #eef3f6;
+  --dsw-static-neutral-bluish-100: #e9eff3;
+  --dsw-static-neutral-bluish-150: #e6edf1;
+  --dsw-static-neutral-bluish-200: #dee8ee;
+  --dsw-static-neutral-bluish-300: #ccd9e1;
+  --dsw-static-neutral-bluish-310: #c6d4dd;
+  --dsw-static-neutral-bluish-400: #aab9c3;
+  --dsw-static-neutral-bluish-500: #92a3ae;
+  --dsw-static-neutral-bluish-600: #7b8d99;
+  --dsw-static-neutral-bluish-700: #5f707c;
+  --dsw-static-neutral-bluish-750: #47565f;
+  --dsw-static-neutral-bluish-800: #37444c;
+  --dsw-static-neutral-bluish-850: #2c383f;
+  --dsw-static-neutral-bluish-875: #243036;
+  --dsw-static-neutral-bluish-900: #1b252a;
+  --dsw-static-neutral-bluish-950: #151d22;
+  --dsw-static-neutral-bluish-1000: #10181d;
 
-  /* 主色：雾蓝青（品牌 / 主按钮 / 焦点） */
-  --dsw-static-deepseek-50: #f1f6f9;
-  --dsw-static-deepseek-100: #e3eef4;
-  --dsw-static-deepseek-200: #d0e3eb;
-  --dsw-static-deepseek-300: #b4d1dd;
-  --dsw-static-deepseek-400: #91b6c6;
-  --dsw-static-deepseek-450: #77a0b3;
+  /* 主色：WorkBuddy 的 #5C7E92 */
+  --dsw-static-deepseek-50: #f2f7f9;
+  --dsw-static-deepseek-100: #e3eff4;
+  --dsw-static-deepseek-200: #d0e4ec;
+  --dsw-static-deepseek-300: #b4d1de;
+  --dsw-static-deepseek-400: #91b7c7;
+  --dsw-static-deepseek-450: #77a1b4;
   --dsw-static-deepseek-500: #5c7e92;
   --dsw-static-deepseek-600: #4d6c7e;
   --dsw-static-deepseek-700-delete: #3f5968;
   --dsw-static-deepseek-800: #344a56;
   --dsw-static-deepseek-900: #293b45;
 
-  /* 辅助蓝：链接 / 选中 / 信息态 */
-  --dsw-static-blue-50: #f2f8fa;
-  --dsw-static-blue-50p: #eaf3f7;
-  --dsw-static-blue-75: #e8f2f7;
-  --dsw-static-blue-100: #daeaf1;
-  --dsw-static-blue-300: #a9cbdc;
+  --dsw-static-blue-50: #f3f8fa;
+  --dsw-static-blue-50p: #ebf3f7;
+  --dsw-static-blue-75: #e9f2f6;
+  --dsw-static-blue-100: #dbeaf1;
+  --dsw-static-blue-300: #a9cbdb;
   --dsw-static-blue-400: #80b0c5;
   --dsw-static-blue-450: #6b9eb5;
   --dsw-static-blue-500: #5c8ca3;
@@ -70,134 +56,104 @@ html body[data-ds-dark-theme] {
   --dsw-static-blue-900: #26424f;
   --dsw-static-blue-950: #1b2f39;
 
-  /* 纯灰：去掉原色的黄调，跟主体保持同一冷调 */
-  --dsw-static-neutral-00: #fcfdfd;
-  --dsw-static-neutral-50: #fafbfb;
-  --dsw-static-neutral-100: #f5f7f7;
-  --dsw-static-neutral-150: #edf0f0;
-  --dsw-static-neutral-200: #e5e9e9;
-  --dsw-static-neutral-250: #dce2e2;
-  --dsw-static-neutral-300: #d4dbdb;
-  --dsw-static-neutral-400: #a2acad;
-  --dsw-static-neutral-500: #7f898b;
-  --dsw-static-neutral-550: #656f71;
-  --dsw-static-neutral-600: #545e60;
-  --dsw-static-neutral-700: #3c4547;
-  --dsw-static-neutral-800: #292f31;
-  --dsw-static-neutral-850: #212628;
-  --dsw-static-neutral-900: #0f1314;
-
-  /* 圆角：比默认收敛一些，雾面更松弛 */
   --dsw-radius-xs: 4px;
-  --dsw-radius-sm: 6px;
+  --dsw-radius-sm: 7px;
   --dsw-radius-md: 10px;
   --dsw-radius-lg: 14px;
   --dsw-radius-xl: 18px;
   --dsw-radius-panel: 16px;
 }
 
-/* 中文优先的正文栈，官方默认字体列表留在后备位 */
 html body {
   --dsh-font-family-text-default: "Segoe UI Variable Text", "Segoe UI",
-    "Microsoft YaHei UI", "Microsoft YaHei", "PingFang SC", system-ui,
-    -apple-system, sans-serif;
-  --dsh-font-family-code-default: "Cascadia Code", "JetBrains Mono",
-    "SF Mono", Consolas, "Courier New", monospace;
+    "Microsoft YaHei UI", "Microsoft YaHei", "PingFang SC", system-ui, sans-serif;
 }
 
-/* ==========================================================================
-   表面层次
-   --------------------------------------------------------------------------
-   官方浅色下 bg-base / layer-1 / layer-2 全指向同一个近白色，整片没有层次。
-   这里把画布压成雾白、卡片与输入框留纯白，用明度差代替边框。
-   ========================================================================== */
-
+/* 表面：素白画布、纯白卡片，对齐 WorkBuddy 的层次 */
 html body {
-  --dsw-alias-bg-base: #f1f3f4;
+  --dsw-alias-bg-base: #fbfcfd;
   --dsw-alias-bg-layer-1: #ffffff;
-  --dsw-alias-bg-layer-2: #fafbfb;
-  --dsw-alias-bg-layer-3: #eceff0;
-  --dsw-alias-bg-overlay: #e8ecee;
-  --dsw-alias-border-l1: #dee2e4;
-  --dsw-alias-border-l2: #d4d9dc;
-  --dsw-alias-border-l3: #c8ced2;
-  --dsw-alias-bg-skeleton: #e0e5e7;
-  --dsw-alias-bg-document-selection: color-mix(
-    in srgb, var(--dsw-static-deepseek-500) 26%, transparent
-  );
+  --dsw-alias-bg-layer-2: #fbfdfe;
+  --dsw-alias-bg-layer-3: #f2f6f9;
+  --dsw-alias-bg-overlay: #eef3f6;
+  --dsw-alias-border-l1: #e1eaef;
+  --dsw-alias-border-l2: #d7e4ec;
+  --dsw-alias-border-l3: #c9d9e3;
+  --dsw-alias-bg-skeleton: #eaf1f5;
+  --dsw-alias-bg-document-selection: color-mix(in srgb, var(--dsw-static-deepseek-500) 18%, transparent);
   --dsw-focus-ring-color: var(--dsw-static-deepseek-500);
-  --dsw-alias-scrollbar-bg-l1: color-mix(in srgb, #8b949a 34%, transparent);
-  --dsw-alias-scrollbar-hover-l1: color-mix(in srgb, #757e84 58%, transparent);
-  --dsw-alias-scrollbar-bg-l2: color-mix(in srgb, #a3abb0 40%, transparent);
-  --dsw-alias-scrollbar-hover-l2: color-mix(in srgb, #8b949a 64%, transparent);
+  --dsw-alias-scrollbar-bg-l1: #d2dfe8;
+  --dsw-alias-scrollbar-hover-l1: #bccfdd;
+  --dsw-alias-scrollbar-bg-l2: #dce7ee;
+  --dsw-alias-scrollbar-hover-l2: #c7d8e3;
 }
 
 html body[data-ds-dark-theme] {
-  --dsw-alias-bg-base: #14181b;
-  --dsw-alias-bg-layer-1: #1b2024;
-  --dsw-alias-bg-layer-2: #1f252a;
-  --dsw-alias-bg-layer-3: #171c20;
-  --dsw-alias-bg-overlay: #232a2f;
-  --dsw-alias-border-l1: #262c31;
-  --dsw-alias-border-l2: #2d3439;
-  --dsw-alias-border-l3: #363e44;
-  --dsw-alias-bg-skeleton: #20262b;
+  --dsw-alias-bg-base: #161f25;
+  --dsw-alias-bg-layer-1: #1d282e;
+  --dsw-alias-bg-layer-2: #222d34;
+  --dsw-alias-bg-layer-3: #192328;
+  --dsw-alias-bg-overlay: #26343c;
+  --dsw-alias-border-l1: #28353d;
+  --dsw-alias-border-l2: #303e47;
+  --dsw-alias-border-l3: #3a4a54;
+  --dsw-alias-bg-skeleton: #222d34;
 }
 
 /* ==========================================================================
-   装饰层：雾 + 白龙
-   z-index 取 1：在普通流之上、弹窗之下，且不拦截任何指针事件。
+   侧栏：素白 + 一丝雾（对齐 WorkBuddy .conversation-list）
    ========================================================================== */
-
-body::before,
-body::after {
-  content: "";
-  position: fixed;
-  pointer-events: none;
-  z-index: 1;
+html body [data-sidebar-scrollport],
+html body [class*="sidebar"],
+html body [class*="Sidebar"] {
+  /* 只给明确的侧栏容器，避免影响内容 */
 }
 
-/* 雾气：中性灰调，只在四角聚拢，中央留白 */
-body::before {
-  inset: 0;
+/* ==========================================================================
+   对话区：白龙淡底纹 + 流动雾气（内嵌背景，不是浮层！）
+   对应 WorkBuddy 的 .conversation-shell
+   ========================================================================== */
+html body [class*="an3WzG_viewArea"],
+html body [class*="an3WzG_scrollBody"] {
+  background-color: #fbfcfd !important;
   background-image:
-    radial-gradient(46vw 44vh at 0% 0%, rgba(160, 166, 170, 0.17), transparent 60%),
-    radial-gradient(52vw 50vh at 100% 100%, rgba(118, 126, 132, 0.19), transparent 62%),
-    radial-gradient(40vw 36vh at 0% 100%, rgba(148, 154, 158, 0.10), transparent 56%),
-    radial-gradient(38vw 34vh at 100% 0%, rgba(170, 176, 180, 0.10), transparent 54%);
-  animation: yunlan-mist 46s ease-in-out infinite alternate;
+    url("/dsh-yunlan/portrait.webp"),
+    radial-gradient(58% 42% at 18% 22%, rgba(255,255,255,.92) 0%, rgba(255,255,255,0) 68%),
+    radial-gradient(66% 48% at 82% 62%, rgba(226,236,243,.66) 0%, rgba(226,236,243,0) 70%),
+    radial-gradient(52% 40% at 48% 98%, rgba(255,255,255,.96) 0%, rgba(255,255,255,0) 72%),
+    radial-gradient(40% 34% at 70% 8%, rgba(232,240,246,.55) 0%, rgba(232,240,246,0) 70%) !important;
+  background-repeat: no-repeat !important;
+  background-size: 390px auto, 170% 170%, 170% 170%, 170% 170%, 170% 170% !important;
+  background-position: 100% 88%, 0% 0%, 100% 100%, 50% 100%, 70% 0% !important;
+  animation: dsh-mist 52s ease-in-out infinite alternate !important;
 }
 
-/* 云澜立绘：压在右下角、略微出血，作为画面的视觉锚点 */
-body::after {
-  inset: auto -5% -16% auto;
-  width: min(33vw, 460px);
-  height: min(82vh, 960px);
-  background: url("/dsh-yunlan/portrait.webp") no-repeat right bottom / contain;
-  opacity: 0.9;
-  -webkit-mask-image: linear-gradient(to right, transparent 0%, rgba(0, 0, 0, 0.45) 14%, #000 38%);
-  mask-image: linear-gradient(to right, transparent 0%, rgba(0, 0, 0, 0.45) 14%, #000 38%);
-}
-
-body[data-ds-dark-theme]::before {
+html body[data-ds-dark-theme] [class*="an3WzG_viewArea"],
+html body[data-ds-dark-theme] [class*="an3WzG_scrollBody"] {
+  background-color: #161f25 !important;
   background-image:
-    radial-gradient(46vw 44vh at 0% 0%, rgba(146, 172, 186, 0.16), transparent 60%),
-    radial-gradient(52vw 50vh at 100% 100%, rgba(84, 106, 120, 0.22), transparent 62%),
-    radial-gradient(40vw 36vh at 0% 100%, rgba(120, 146, 160, 0.12), transparent 56%);
+    url("/dsh-yunlan/portrait.webp"),
+    radial-gradient(58% 42% at 18% 22%, rgba(28,40,48,.9) 0%, rgba(28,40,48,0) 68%),
+    radial-gradient(66% 48% at 82% 62%, rgba(40,58,70,.6) 0%, rgba(40,58,70,0) 70%),
+    radial-gradient(52% 40% at 48% 98%, rgba(22,31,37,.95) 0%, rgba(22,31,37,0) 72%) !important;
 }
 
-body[data-ds-dark-theme]::after {
-  opacity: 0.6;
-  filter: brightness(1.08) saturate(0.85);
-  mix-blend-mode: screen;
+@keyframes dsh-mist {
+  0%   { background-position: 100% 88%, 0% 0%,   100% 100%, 50% 100%, 70% 0%; }
+  50%  { background-position: 100% 88%, 22% 16%,  78% 62%,  44% 88%,  58% 12%; }
+  100% { background-position: 100% 88%, 34% 28%,  62% 44%,  56% 76%,  48% 18%; }
 }
 
-@keyframes yunlan-mist {
-  0% { transform: translate3d(0, 0, 0) scale(1); }
-  50% { transform: translate3d(-1.2%, 0.9%, 0) scale(1.025); }
-  100% { transform: translate3d(1.4%, -0.8%, 0) scale(1.01); }
+/* 主面板兜底底色 */
+html body [class*="mP3x-q_mainPanel"] { background-color: #fbfcfd !important; }
+html body[data-ds-dark-theme] [class*="mP3x-q_mainPanel"] { background-color: #161f25 !important; }
+
+/* 输入框：磨砂白（对齐 WorkBuddy .cr-input-container） */
+html body [class*="an3WzG_composerSeat"] {
+  background: transparent !important;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  body::before { animation: none; }
+  html body [class*="an3WzG_viewArea"],
+  html body [class*="an3WzG_scrollBody"] { animation: none !important; }
 }

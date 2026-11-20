@@ -15,7 +15,7 @@ const HERE = dirname(fileURLToPath(import.meta.url));
 const STYLESHEET = join(HERE, 'theme.css');
 const GUEST_CSS = join(HERE, 'guest.css');
 const ARTWORK = join(HERE, 'assets', 'portrait-corner.webp');
-const GUEST_ART = join(HERE, 'assets', 'guest', 'dafeiyu.webp');
+const Q_DIR = join(HERE, 'assets', 'q');
 
 const ROUTES = {
   '/dsh-yunlan/theme.css': { file: STYLESHEET, type: 'text/css; charset=utf-8' },
@@ -23,8 +23,17 @@ const ROUTES = {
   // 两个扩展名指向同一份 WebP，改素材时不必重启宿主
   '/dsh-yunlan/portrait.webp': { file: ARTWORK, type: 'image/webp' },
   '/dsh-yunlan/portrait.png': { file: ARTWORK, type: 'image/webp' },
-  '/dsh-yunlan/guest/dafeiyu.webp': { file: GUEST_ART, type: 'image/webp' },
+
 };
+
+// Q版表情路由：yunlan-1..6 / dafeiyu-1..6
+for (const who of ['yunlan', 'dafeiyu']) {
+  for (let i = 1; i <= 6; i++) {
+    ROUTES['/dsh-yunlan/q/' + who + '-' + i + '.webp'] = {
+      file: join(Q_DIR, who + '-' + i + '.webp'), type: 'image/webp',
+    };
+  }
+}
 
 export function apply(ctx) {
   const webServer = ctx.webServer;
