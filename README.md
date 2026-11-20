@@ -1,23 +1,22 @@
 # 云澜 · 白雾 — DSH 主题
 
-给 [DeepSeek Harness](https://www.deepseek.com/harness/) Web UI 的雾蓝皮肤。纯 CSS，不 patch 任何官方文件。
+给 DeepSeek Harness Web UI 的雾蓝主题插件，附带输入框旁的双角色动画。[DeepSeek Harness](https://www.deepseek.com/harness/)
 
-![浅色](docs/preview-light.png)
+![云澜和大肥鱼的新版表情，按输入框舞台的实际尺寸展示](docs/character-design/stage-preview.png)
 
-![深色](docs/preview-dark.png)
+v0.4.1 把两只角色统一成同一套 Q 版画风。云澜保留银白长发、龙角、金瞳和白金衣装。大肥鱼保留蓝紫长发、鲸尾和鲸鱼围裙，闲置时会端碗用筷子吃白饭。
 
-## 它做了什么（对齐 WorkBuddy 白雾）
+[角色多视图和透明表情包](docs/character-design/) · [浅色界面](docs/preview-light.png) · [深色界面](docs/preview-dark.png)
 
-设计完全照搬 WorkBuddy 的 `.conversation-shell` 思路，不是浮层贴纸：
+## 主题效果
 
 - **底纹内嵌**：白龙淡底纹 + 四层径向雾气，作为对话区 `[class*="viewArea"]` 的 `background-image`，随 52s 动画流动。不遮挡任何内容、不拦截指针。
 - **主色 #5C7E92**：素白 / 雾蓝灰，按钮、焦点、选中态统一走 WorkBuddy 那套色。
-- **Q版挂件**：96px 的云澜扒在输入框右上角（`GRgSLq_input` 锚点），bob 呼吸、悬停上窜、长按害羞、点击换表情 + 台词——和 WorkBuddy `#byakuru-mascot` 同一套交互。
-- **可切换大肥鱼**：右下角小圆点切换云澜 / 大肥鱼，各 6 张 Q 版表情。状态存 localStorage。
+- **Q 版挂件**：云澜和大肥鱼一起待在输入框右上角，闲置时可以点击任一角色互动。
 - **明暗跟随**：官方浅色/深色/跟随系统照常有效。
 
 
-## 双角色动画（v0.4+）
+## 双角色动画
 
 两个 Q 版角色常驻输入框右上角，会根据当前状态自己表演：
 
@@ -25,42 +24,46 @@
 | --- | --- | --- |
 | 闲置 | 打盹 | 捧碗吃白饭 |
 | 你在输入 | 凑近注视 | 放下碗偷看 |
-| 模型思考中 | 焦急催促「快想想呀！」 | 手忙脚乱 → 害羞 |
+| 发送或生成中 | 安静等待 | 稍后露出害羞表情 |
 | 偶发互动（闲置 14–22s） | 伸手戳大肥鱼 | 惊跳 → 鼓腮「我不是大肥鱼……」 |
 
 故事设定：**大肥鱼总惦记她的白饭，小龙看不下去就去催她**。
 
-状态由 `data-phase` + 停止按钮检测，1.2s 轮询；演出全部是 CSS keyframes + 表情切换，舞台 `pointer-events:none`，输入框不可见时自动隐藏。
+插件通过当前输入框内的草稿、中文输入法组合状态以及发送和停止按钮感知状态。开始输入或生成时会结束闲置演出。输入框不可见或页面切到后台时，舞台会隐藏并暂停演出。表情图先解码再淡入淡出，角色姿势平滑过渡，并遵循系统的减少动态效果设置。
 
-## 安装
+## 安装或升级
 
-需要 DSH 桌面端（或 `dsh web`）。插件装进 profile 后重启 DSH。
+克隆仓库后，在仓库目录运行 `npm pack` 生成 `dsh-yunlan-theme-0.4.1.tgz`。从本地压缩包安装可避免移动源码目录后使插件路径失效。
 
 ```bash
+npm pack
+
 # 桌面端
-dsh plugin --profile desktop add file:/绝对路径/dsh-yunlan-theme
+dsh plugin --profile desktop add "file:/绝对路径/dsh-yunlan-theme-0.4.1.tgz"
 
 # 或者浏览器版
-dsh plugin --profile web add file:/绝对路径/dsh-yunlan-theme
+dsh plugin --profile web add "file:/绝对路径/dsh-yunlan-theme-0.4.1.tgz"
 ```
 
-Windows 上 `dsh` 通常不在 PATH，可直接调桌面端内置 CLI：
+Windows 桌面端也可直接使用安装目录里的 CLI。
 
 ```bat
-"%LOCALAPPDATA%\Programs\DeepSeek Harness\resources\runtime\cli\bin\dsh.cmd" plugin --profile desktop add file:D:\path\to\dsh-yunlan-theme
+"%LOCALAPPDATA%\Programs\DeepSeek Harness\resources\runtime\cli\bin\dsh.cmd" plugin --profile desktop add "file:D:/path/to/dsh-yunlan-theme-0.4.1.tgz"
 ```
 
-装完**完全退出 DSH 再打开**（插件 bundle 在启动时加载）。
+装完后完全退出并重新打开 DSH。若升级时报旧源码路径不存在，先在对应 profile 执行下面的卸载命令，再用新包安装。
 
-也可以双击 `install.bat`（自动探测 DSH 安装位置）。
+在固定源码目录开发时，可双击 `install.bat` 安装源码版。脚本会探测 DSH 桌面端位置。
 
 ## 卸载
 
 ```bash
 dsh plugin --profile desktop remove dsh-yunlan-theme
+# 浏览器版
+dsh plugin --profile web remove dsh-yunlan-theme
 ```
 
-或双击 `uninstall.bat`。卸载后重启 DSH 即恢复原样，没有残留文件。
+桌面版也可双击 `uninstall.bat`。卸载后重启 DSH 以恢复默认界面。
 
 ## 改配色
 
@@ -77,27 +80,20 @@ dsh plugin --profile desktop remove dsh-yunlan-theme
 
 底纹换图：替换 `assets/portrait-corner.webp`（建议透明背景、Alpha 上限 20% 左右）。
 
-## 联名客座：大肥鱼
+## 大肥鱼素材署名
 
-![客座角色](docs/preview-guest.png)
-
-内置了与社区形象「大肥鱼」的联动，默认关闭，随时切换：
-
-- **切换**：点界面右下角的小圆点。状态存在浏览器 `localStorage`，刷新后保持。
-- **交互**：鼠标悬停角色上浮摆尾；点击切一句台词（「我不是大肥鱼……」等 4 句轮换）。
-- **互斥**：大肥鱼与云澜共用同一个角色位，同一时间只出现一个；界面配色 token 完全不变。
-- **授权**：素材来自 [YunYueSama/codex-deepseek-pet](https://github.com/YunYueSama/codex-deepseek-pet)，按其署名许可使用（允许修改与商用，须署名）。详见 [GUEST-ATTRIBUTION.md](GUEST-ATTRIBUTION.md) 与 [GUEST-LICENSE.txt](GUEST-LICENSE.txt)。`assets/guest/dafeiyu.webp` 经缩放与 WebP 转码，未改动角色内容。
-
-设计动机与完整方案见 `docs/guest-dafeiyu.md`。注意：方案文档基于早期对底层社区角色授权的保守判断，建议拆成独立包；实际取用的素材来自上游作者的署名许可仓库，权限足够，因此最终实现改为内置可切换客座，省去双包安装。
+大肥鱼素材的来源和许可见 [GUEST-ATTRIBUTION.md](GUEST-ATTRIBUTION.md) 与 [GUEST-LICENSE.txt](GUEST-LICENSE.txt)。早期客座设计见 [guest-dafeiyu.md](docs/guest-dafeiyu.md)。
 
 ## 实现说明
 
-`index.js`（宿主侧）用 `ctx.webServer.register` 暴露两条路由：
+`index.js` 在宿主侧通过 `ctx.webServer.register` 提供样式和素材。
 
 - `/dsh-yunlan/theme.css`
+- `/dsh-yunlan/stage.css`
 - `/dsh-yunlan/portrait.webp`
+- `/dsh-yunlan/q/*.webp`（双角色表情）
 
-`client.js`（浏览器侧）只做一件事：往 `<head>` 插一个 `<link>`。所以样式表是普通 CSS，DevTools 里能直接改、能热刷。
+`client.js` 在浏览器侧加载样式，并通过 DSH 的插件生命周期挂载和清理舞台。
 
 两个实现细节值得记下来：
 
@@ -106,8 +102,8 @@ dsh plugin --profile desktop remove dsh-yunlan-theme
 
 ## 兼容性
 
-- 开发验证于 DSH Desktop `0.2.2-rc.5`（Electron 44 / `--dsw-*` token 表 0.2.2-rc.5）
-- 依赖 token 命名而非 class 名，所以官方组件改版通常不受影响；token 改名则需要跟着改
+- 在 DSH Desktop `0.2.2-rc.5` 下核对了输入框标记，并验证了桌面与网页 profile 的安装。
+- 配色依赖 DSH 的样式 token。舞台依赖输入框的 `data-composer-*` 标记和按钮标签。
 - 仅覆盖颜色与装饰，不隐藏、不移动任何功能元素
 
 ## License
