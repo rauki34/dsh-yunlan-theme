@@ -1,0 +1,205 @@
+/* ==========================================================================
+   云澜 · 白雾 — DeepSeek Harness 主题
+   --------------------------------------------------------------------------
+   做法：只改设计 token（--dsw-*）+ 两个 body 伪元素，不碰组件结构。
+
+   两个必须记住的实现约束：
+   1. 官方在 body 上第二次声明了整套 --dsw-static-* 色阶，且加载在我们的
+      样式表之后。只写 :root 会被盖掉，必须用 `html body` 把特异性抬上去。
+   2. 雾层是 position: fixed 且在内容之上，强度必须克制（角落 alpha ≈0.2、
+      中央留空），否则正文对比度会被整体拉低。
+   ========================================================================== */
+
+/* ==========================================================================
+   色阶底座
+   --------------------------------------------------------------------------
+   全部别名（--dsw-alias-*）都按语义引用这里的静态色阶，所以换掉色阶就等于
+   换掉整站配色，不用逐条重写别名。
+   ========================================================================== */
+
+html body,
+html body[data-ds-dark-theme] {
+  /* 雾白 → 深岫：浅色端冷白，深色端带蓝的暗面 */
+  --dsw-static-neutral-bluish-00: #fdfefe;
+  --dsw-static-neutral-bluish-50: #fafcfd;
+  --dsw-static-neutral-bluish-55: #f7fafc;
+  --dsw-static-neutral-bluish-60: #fbfdfe;
+  --dsw-static-neutral-bluish-75: #f2f6f9;
+  --dsw-static-neutral-bluish-90: #edf2f5;
+  --dsw-static-neutral-bluish-100: #e7edf1;
+  --dsw-static-neutral-bluish-150: #e3eaef;
+  --dsw-static-neutral-bluish-200: #dbe4ea;
+  --dsw-static-neutral-bluish-300: #c7d3da;
+  --dsw-static-neutral-bluish-310: #c1cfd7;
+  --dsw-static-neutral-bluish-400: #a5b3bb;
+  --dsw-static-neutral-bluish-500: #8d9da6;
+  --dsw-static-neutral-bluish-600: #778892;
+  --dsw-static-neutral-bluish-700: #5d6e78;
+  --dsw-static-neutral-bluish-750: #465560;
+  --dsw-static-neutral-bluish-800: #37454e;
+  --dsw-static-neutral-bluish-850: #2d3941;
+  --dsw-static-neutral-bluish-875: #253139;
+  --dsw-static-neutral-bluish-900: #1c262d;
+  --dsw-static-neutral-bluish-950: #161f25;
+  --dsw-static-neutral-bluish-1000: #10181d;
+
+  /* 主色：雾蓝青（品牌 / 主按钮 / 焦点） */
+  --dsw-static-deepseek-50: #f1f6f9;
+  --dsw-static-deepseek-100: #e3eef4;
+  --dsw-static-deepseek-200: #d0e3eb;
+  --dsw-static-deepseek-300: #b4d1dd;
+  --dsw-static-deepseek-400: #91b6c6;
+  --dsw-static-deepseek-450: #77a0b3;
+  --dsw-static-deepseek-500: #5c7e92;
+  --dsw-static-deepseek-600: #4d6c7e;
+  --dsw-static-deepseek-700-delete: #3f5968;
+  --dsw-static-deepseek-800: #344a56;
+  --dsw-static-deepseek-900: #293b45;
+
+  /* 辅助蓝：链接 / 选中 / 信息态 */
+  --dsw-static-blue-50: #f2f8fa;
+  --dsw-static-blue-50p: #eaf3f7;
+  --dsw-static-blue-75: #e8f2f7;
+  --dsw-static-blue-100: #daeaf1;
+  --dsw-static-blue-300: #a9cbdc;
+  --dsw-static-blue-400: #80b0c5;
+  --dsw-static-blue-450: #6b9eb5;
+  --dsw-static-blue-500: #5c8ca3;
+  --dsw-static-blue-600: #4c778c;
+  --dsw-static-blue-800: #355a6b;
+  --dsw-static-blue-900: #26424f;
+  --dsw-static-blue-950: #1b2f39;
+
+  /* 纯灰：去掉原色的黄调，跟主体保持同一冷调 */
+  --dsw-static-neutral-00: #fdfefe;
+  --dsw-static-neutral-50: #fafbfb;
+  --dsw-static-neutral-100: #f5f7f7;
+  --dsw-static-neutral-150: #edf0f0;
+  --dsw-static-neutral-200: #e5e9e9;
+  --dsw-static-neutral-250: #dce2e2;
+  --dsw-static-neutral-300: #d4dbdb;
+  --dsw-static-neutral-400: #a2acad;
+  --dsw-static-neutral-500: #7f898b;
+  --dsw-static-neutral-550: #656f71;
+  --dsw-static-neutral-600: #545e60;
+  --dsw-static-neutral-700: #3c4547;
+  --dsw-static-neutral-800: #292f31;
+  --dsw-static-neutral-850: #212628;
+  --dsw-static-neutral-900: #0f1314;
+
+  /* 圆角：比默认收敛一些，雾面更松弛 */
+  --dsw-radius-xs: 4px;
+  --dsw-radius-sm: 6px;
+  --dsw-radius-md: 10px;
+  --dsw-radius-lg: 14px;
+  --dsw-radius-xl: 18px;
+  --dsw-radius-panel: 16px;
+}
+
+/* 中文优先的正文栈，官方默认字体列表留在后备位 */
+html body {
+  --dsh-font-family-text-default: "Segoe UI Variable Text", "Segoe UI",
+    "Microsoft YaHei UI", "Microsoft YaHei", "PingFang SC", system-ui,
+    -apple-system, sans-serif;
+  --dsh-font-family-code-default: "Cascadia Code", "JetBrains Mono",
+    "SF Mono", Consolas, "Courier New", monospace;
+}
+
+/* ==========================================================================
+   表面层次
+   --------------------------------------------------------------------------
+   官方浅色下 bg-base / layer-1 / layer-2 全指向同一个近白色，整片没有层次。
+   这里把画布压成雾白、卡片与输入框留纯白，用明度差代替边框。
+   ========================================================================== */
+
+html body {
+  --dsw-alias-bg-base: #e9f1f5;
+  --dsw-alias-bg-layer-1: #ffffff;
+  --dsw-alias-bg-layer-2: #f8fbfd;
+  --dsw-alias-bg-layer-3: #e3edf2;
+  --dsw-alias-bg-overlay: #e3eef3;
+  --dsw-alias-border-l1: #d7e4eb;
+  --dsw-alias-border-l2: #ccdce6;
+  --dsw-alias-border-l3: #bed2de;
+  --dsw-alias-bg-skeleton: #dce8ee;
+  --dsw-alias-bg-document-selection: color-mix(
+    in srgb, var(--dsw-static-deepseek-500) 26%, transparent
+  );
+  --dsw-focus-ring-color: var(--dsw-static-deepseek-500);
+  --dsw-alias-scrollbar-bg-l1: color-mix(in srgb, #8d9da6 34%, transparent);
+  --dsw-alias-scrollbar-hover-l1: color-mix(in srgb, #778892 58%, transparent);
+  --dsw-alias-scrollbar-bg-l2: color-mix(in srgb, #a5b3bb 40%, transparent);
+  --dsw-alias-scrollbar-hover-l2: color-mix(in srgb, #8d9da6 64%, transparent);
+}
+
+html body[data-ds-dark-theme] {
+  --dsw-alias-bg-base: #131b20;
+  --dsw-alias-bg-layer-1: #1a2429;
+  --dsw-alias-bg-layer-2: #1e2a30;
+  --dsw-alias-bg-layer-3: #162026;
+  --dsw-alias-bg-overlay: #223038;
+  --dsw-alias-border-l1: #243138;
+  --dsw-alias-border-l2: #2b3941;
+  --dsw-alias-border-l3: #34454e;
+  --dsw-alias-bg-skeleton: #1f2a30;
+}
+
+/* ==========================================================================
+   装饰层：雾 + 白龙
+   z-index 取 1：在普通流之上、弹窗之下，且不拦截任何指针事件。
+   ========================================================================== */
+
+body::before,
+body::after {
+  content: "";
+  position: fixed;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* 雾气只在四角聚拢，中央留白 */
+body::before {
+  inset: 0;
+  background-image:
+    radial-gradient(50vw 48vh at 0% 0%, rgba(146, 184, 203, 0.20), transparent 62%),
+    radial-gradient(54vw 52vh at 100% 100%, rgba(84, 122, 145, 0.20), transparent 64%),
+    radial-gradient(44vw 40vh at 0% 100%, rgba(120, 158, 180, 0.13), transparent 58%),
+    radial-gradient(40vw 36vh at 100% 0%, rgba(162, 196, 212, 0.12), transparent 56%);
+  animation: yunlan-mist 46s ease-in-out infinite alternate;
+}
+
+/* 白龙底纹：右下角，向内渐隐以免露出矩形容器边界 */
+body::after {
+  inset: auto 0 0 auto;
+  width: min(42vw, 560px);
+  height: min(58vh, 700px);
+  background: url("/dsh-yunlan/portrait.webp") no-repeat right bottom / contain;
+  opacity: 0.6;
+  filter: saturate(0.85);
+  -webkit-mask-image: radial-gradient(118% 104% at 100% 100%, #000 34%, rgba(0, 0, 0, 0.55) 62%, transparent 88%);
+  mask-image: radial-gradient(118% 104% at 100% 100%, #000 34%, rgba(0, 0, 0, 0.55) 62%, transparent 88%);
+}
+
+body[data-ds-dark-theme]::before {
+  background-image:
+    radial-gradient(50vw 48vh at 0% 0%, rgba(122, 168, 190, 0.22), transparent 62%),
+    radial-gradient(54vw 52vh at 100% 100%, rgba(70, 108, 132, 0.24), transparent 64%),
+    radial-gradient(44vw 40vh at 0% 100%, rgba(96, 138, 162, 0.16), transparent 58%),
+    radial-gradient(40vw 36vh at 100% 0%, rgba(132, 172, 194, 0.14), transparent 56%);
+}
+
+body[data-ds-dark-theme]::after {
+  opacity: 0.34;
+  filter: saturate(0.6) brightness(1.15);
+  mix-blend-mode: screen;
+}
+
+@keyframes yunlan-mist {
+  0% { transform: translate3d(0, 0, 0) scale(1); }
+  50% { transform: translate3d(-1.2%, 0.9%, 0) scale(1.025); }
+  100% { transform: translate3d(1.4%, -0.8%, 0) scale(1.01); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body::before { animation: none; }
+}

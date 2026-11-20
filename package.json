@@ -1,0 +1,53 @@
+{
+  "name": "dsh-yunlan-theme",
+  "version": "0.1.0",
+  "description": "云澜 · 白雾 — a misty blue-grey theme for the DeepSeek Harness Web UI. Pure CSS token overrides, no patching.",
+  "type": "module",
+  "license": "MIT",
+  "author": "rauki",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rauki34/dsh-yunlan-theme.git"
+  },
+  "homepage": "https://github.com/rauki34/dsh-yunlan-theme#readme",
+  "keywords": [
+    "dsh",
+    "dsh-plugin",
+    "deepseek-harness",
+    "theme",
+    "skin",
+    "css"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "exports": {
+    ".": "./index.js",
+    "./client": "./client.js"
+  },
+  "files": [
+    "index.js",
+    "client.js",
+    "theme.css",
+    "cordis.patch.yml",
+    "assets/*",
+    "docs/*.png",
+    "README.md",
+    "LICENSE"
+  ],
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "platform": "web",
+      "immediately": true,
+      "inject": [
+        "@deepseek-ai/dsh-client-ui-conversation"
+      ]
+    }
+  },
+  "scripts": {
+    "check": "node --check index.js && node --check client.js"
+  }
+}
