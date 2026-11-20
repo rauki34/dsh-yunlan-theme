@@ -58,6 +58,10 @@ dsh plugin --profile desktop remove dsh-yunlan-theme
 
 底纹换图：替换 `assets/portrait-corner.webp`（建议透明背景、Alpha 上限 20% 左右）。
 
+## 联名客座（规划）
+
+`docs/guest-dafeiyu.md` 记录了与社区形象「大肥鱼」的联动方案：做成独立可选包（`dsh-yunlan-guest-dafeiyu`），素材按 CC BY-NC-SA 4.0 单独授权，主包保持 MIT。同一时间只显示一个角色，配色 token 不受影响。
+
 ## 实现说明
 
 `index.js`（宿主侧）用 `ctx.webServer.register` 暴露两条路由：

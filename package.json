@@ -23,7 +23,9 @@
   },
   "exports": {
     ".": "./index.js",
-    "./client": "./client.js"
+    "./client": "./client.js",
+    "./locale/*.json": "./locale/*.json",
+    "./icon": "./icon.png"
   },
   "files": [
     "index.js",
@@ -31,6 +33,8 @@
     "theme.css",
     "cordis.patch.yml",
     "assets/*",
+    "locale/*.json",
+    "icon.png",
     "docs/*.png",
     "README.md",
     "LICENSE"
