@@ -23,7 +23,7 @@
 }
 
 #yunlan-stage .actor-yunlan { left: 0; }
-#yunlan-stage .actor-df { right: 0; width: 96px; height: 96px; }
+#yunlan-stage .actor-df { right: 0; }
 
 #yunlan-stage .actor .face {
   position: absolute; inset: 0;
