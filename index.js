@@ -39,6 +39,11 @@ for (const name of ['idle','eat','surprise','shy','angry','sleep','wink','pout']
     file: join(Q_DIR, 'df-' + name + '.webp'), type: 'image/webp',
   };
 }
+for (const name of ['gen-yunlan', 'gen-dafeiyu']) {
+  ROUTES['/dsh-yunlan/q/' + name + '.webp'] = {
+    file: join(Q_DIR, name + '.webp'), type: 'image/webp',
+  };
+}
 
 export function apply(ctx) {
   const webServer = ctx.webServer;
