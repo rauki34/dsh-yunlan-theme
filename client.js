@@ -10,12 +10,13 @@
  */
 (function () {
   var Q = '/dsh-yunlan/q/';
-  var YUN = [Q + 'yunlan-1.webp', Q + 'yunlan-2.webp', Q + 'yunlan-3.webp',
-             Q + 'yunlan-4.webp', Q + 'yunlan-5.webp', Q + 'yunlan-6.webp'];
+  // 统一头身比/画风的新生成主图；状态差异由 stage.css 的滤镜与变形表达
+  var YUN_IMG = Q + 'gen-yunlan.webp';
+  var DF_IMG = Q + 'gen-dafeiyu.webp';
+  var YUN = [YUN_IMG, YUN_IMG, YUN_IMG, YUN_IMG, YUN_IMG, YUN_IMG];
   var DF = {
-    idle: Q + 'df-idle.webp', eat: Q + 'df-eat.webp', surprise: Q + 'df-surprise.webp',
-    shy: Q + 'df-shy.webp', angry: Q + 'df-angry.webp', sleep: Q + 'df-sleep.webp',
-    wink: Q + 'df-wink.webp', pout: Q + 'df-pout.webp',
+    idle: DF_IMG, eat: DF_IMG, surprise: DF_IMG, shy: DF_IMG,
+    angry: DF_IMG, sleep: DF_IMG, wink: DF_IMG, pout: DF_IMG,
   };
 
   var state = 'idle';
